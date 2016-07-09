@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.SyncHttpClient;
@@ -31,17 +32,17 @@ public class MainActivity extends AppCompatActivity {
     List<CalendarEvent> calendarEventList = new ArrayList<>();
     AsyncHttpClient client = new AsyncHttpClient();
 
-    private final String HOST_URL = "www.google.com";
+    private final String HOST_URL = "http://www.google.com";
 
 
     @AfterViews
-    public void initComponents(){
+    public void initComponents() {
 
+        getSupportActionBar().setTitle(Html.fromHtml("<font color=\"yellow\">" + getString(R.string.app_name) + "</font>"));
 
-        scheduleNotification(2000, "Ciao chicco");
+        scheduleNotification(2000, "Hai un appuntamento all'Ufficio Postale di Roma Prati");
 
         sendData();
-
 
 
     }
@@ -53,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         long currentTimeMs = SystemClock.elapsedRealtime();
 
-        Intent intent =  new Intent(NotifyHandlerReceiver.ACTION);
-        intent.putExtra(NotifyHandlerReceiver.EXTRA_TEXT,messaggio);
+        Intent intent = new Intent(NotifyHandlerReceiver.ACTION);
+        intent.putExtra(NotifyHandlerReceiver.EXTRA_TEXT, messaggio);
 
         PendingIntent pendingNotifyIntent = PendingIntent.getBroadcast(
                 this,
@@ -65,23 +66,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     @Background
     public void sendData() {
 
-        CalendarProvider provider = new CalendarProvider(this);
-        List<Calendar> calendars = provider.getCalendars().getList();
-
-        for(Calendar calendar : calendars){
-            List<Event> calendars2 = provider.getEvents(calendar.id).getList();
-            for(Event e : calendars2){
-                CalendarEvent calendarEvent = new CalendarEvent(e.dTStart,e.dTend);
-                if(calendarEvent.isValid())calendarEventList.add(calendarEvent);
-            }
-        }
-
         try {
+
+            CalendarProvider provider = new CalendarProvider(this);
+            List<Calendar> calendars = provider.getCalendars().getList();
+
+            for (Calendar calendar : calendars) {
+                List<Event> calendars2 = provider.getEvents(calendar.id).getList();
+                for (Event e : calendars2) {
+                    CalendarEvent calendarEvent = new CalendarEvent(e.dTStart, e.dTend);
+                    if (calendarEvent.isValid()) calendarEventList.add(calendarEvent);
+                }
+            }
+
             JSONArray jsonArray = new JSONArray();
 
             for (CalendarEvent ce : calendarEventList) {
@@ -101,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
                             System.out.println(responseString);
                         }
                     });
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        } catch (UnsupportedEncodingException | IncompatibleClassChangeError e) {
+//            e.printStackTrace();
         }
     }
 }

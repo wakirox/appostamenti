@@ -6,6 +6,7 @@
     tools:context="com.appostamento.MainActivity">
 
     <ImageView
+        android:id="@+id/imageView"
         android:scaleType="centerCrop"
         android:src="@drawable/map"
         android:layout_width="match_parent"

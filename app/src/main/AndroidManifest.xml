@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
 
 
@@ -15,13 +16,18 @@
         android:name=".AppostamentoApplication"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity_">
+        <activity android:name=".MainActivity_"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".QRCodeActivity_"
+            android:screenOrientation="portrait"
+            />
 
         <receiver android:name=".NotifyHandlerReceiver">
             <intent-filter>
